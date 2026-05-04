@@ -1,0 +1,184 @@
+/*
+ * Hoja de estilos principal de ImmunoTrack.
+ *
+ * Responsabilidad:
+ * - Definir la apariencia general del frontend.
+ * - Estilizar login, menú lateral, área de trabajo, formularios y tarjetas.
+ * - Mantener una interfaz limpia y coherente para la demostración académica.
+ */
+
+/* Aplica box-sizing global para facilitar el cálculo de tamaños. */
+* {
+  box-sizing: border-box;
+}
+
+/* Define estilos base del documento. */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f4f6f8;
+  color: #172033;
+}
+
+/* Define comportamiento visual general de botones. */
+button {
+  cursor: pointer;
+}
+
+/* Contenedor principal de la pantalla de login. */
+.login-page {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+}
+
+/* Tarjeta visual del formulario de login. */
+.login-card {
+  width: 360px;
+  padding: 32px;
+  background: white;
+  border-radius: 18px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+}
+
+/* Ajuste del título principal del login. */
+.login-card h1 {
+  margin-bottom: 4px;
+}
+
+/* Distribución vertical del formulario de login. */
+.login-card form {
+  display: grid;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+/* Estilo general de campos de entrada. */
+input {
+  width: 100%;
+  padding: 11px 12px;
+  border: 1px solid #d7dce3;
+  border-radius: 10px;
+}
+
+/* Estilo general de botones. */
+button {
+  border: none;
+  border-radius: 10px;
+  padding: 11px 14px;
+  background: #10233f;
+  color: white;
+}
+
+/* Layout principal del sistema después del login. */
+.dashboard {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 310px 1fr;
+}
+
+/* Menú lateral izquierdo. */
+.sidebar {
+  background: #0d1b2f;
+  color: white;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Ajuste de inputs dentro del menú lateral. */
+.sidebar input {
+  background: white;
+}
+
+/* Tarjeta interna con la información del doctor. */
+.doctor-box {
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+}
+
+/* Lista vertical de pacientes. */
+.patient-list {
+  display: grid;
+  gap: 8px;
+}
+
+/* Botones individuales de pacientes en el menú lateral. */
+.patient-list button {
+  background: rgba(255, 255, 255, 0.1);
+  text-align: left;
+}
+
+/* Botón para cerrar sesión. */
+.logout-button {
+  margin-top: auto;
+  background: #8c1d1d;
+}
+
+/* Área principal de trabajo. */
+.workspace {
+  padding: 32px;
+}
+
+/* Panel blanco reutilizable para formularios y detalles. */
+.panel,
+.empty-workspace {
+  background: white;
+  border-radius: 20px;
+  padding: 28px;
+  min-height: 420px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.06);
+}
+
+/* Estado inicial del área de trabajo cuando no hay paciente seleccionado. */
+.empty-workspace {
+  display: grid;
+  place-content: center;
+  text-align: center;
+}
+
+/* Formulario de paciente en dos columnas. */
+.patient-form {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+}
+
+/* Contenedor de acciones del formulario. */
+.form-actions {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+/* Pestañas visuales del perfil del paciente. */
+.tabs {
+  display: flex;
+  gap: 10px;
+  margin: 20px 0;
+}
+
+/* Grilla para mostrar la información del paciente seleccionado. */
+.patient-detail {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+/* Mensaje visual de error. */
+.alert-error {
+  background: #ffe5e5;
+  color: #8c1d1d;
+  padding: 10px;
+  border-radius: 10px;
+  margin-bottom: 12px;
+}
+
+/* Texto informativo cuando no hay registros. */
+.empty-text {
+  opacity: 0.75;
+}
