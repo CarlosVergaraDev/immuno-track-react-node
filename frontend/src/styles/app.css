@@ -1,184 +1,967 @@
 /*
- * Hoja de estilos principal de ImmunoTrack.
+ * APP.CSS - ImmunoTrack React
  *
  * Responsabilidad:
- * - Definir la apariencia general del frontend.
- * - Estilizar login, menú lateral, área de trabajo, formularios y tarjetas.
- * - Mantener una interfaz limpia y coherente para la demostración académica.
+ * - Centralizar el estilo visual del frontend React.
+ * - Aproximar la apariencia al proyecto Java MVC original.
+ * - Definir estilos para login, topbar, sidebar, área de trabajo y formularios.
  */
 
-/* Aplica box-sizing global para facilitar el cálculo de tamaños. */
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap");
+
+/*
+ * Variables globales de diseño.
+ * Permiten mantener consistencia visual entre pantallas.
+ */
+:root {
+  --imt-font: "Space Grotesk", sans-serif;
+  --imt-bg: #f6f7f9;
+  --imt-surface: #ffffff;
+  --imt-sidebar: #f8f9fb;
+  --imt-border: #e6e8ec;
+  --imt-input: #f0f1f4;
+  --imt-text: #1f2933;
+  --imt-muted: #7b8490;
+  --imt-primary: #075f9f;
+  --imt-primary-hover: #064f86;
+  --imt-danger: #b42318;
+  --imt-danger-bg: #fff1f2;
+  --imt-danger-border: #fecdd3;
+  --imt-radius-sm: 8px;
+  --imt-radius-md: 12px;
+  --imt-radius-lg: 16px;
+  --imt-topbar-height: 78px;
+  --imt-sidebar-width: 350px;
+  --imt-workspace-max-width: 1500px;
+}
+
+/*
+ * Reset básico del documento.
+ */
 * {
   box-sizing: border-box;
 }
 
-/* Define estilos base del documento. */
+html,
+body,
+#root {
+  width: 100%;
+  min-height: 100%;
+}
+
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
-  background: #f4f6f8;
-  color: #172033;
+  font-family: var(--imt-font);
+  background: var(--imt-bg);
+  color: var(--imt-text);
 }
 
-/* Define comportamiento visual general de botones. */
-button {
-  cursor: pointer;
+button,
+input,
+select {
+  font-family: inherit;
 }
 
-/* Contenedor principal de la pantalla de login. */
-.login-page {
-  min-height: 100vh;
-  display: grid;
-  place-items: center;
+/* =========================================================
+   Pantalla de acceso
+   ========================================================= */
+
+/*
+ * Estructura general del login.
+ * Divide la pantalla entre imagen institucional y panel de formulario.
+ */
+.auth-shell {
+  height: 100vh;
+  display: flex;
+  align-items: stretch;
+  background: #f5f5f6;
+  overflow: hidden;
 }
 
-/* Tarjeta visual del formulario de login. */
-.login-card {
-  width: 360px;
-  padding: 32px;
-  background: white;
-  border-radius: 18px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+/*
+ * Panel visual izquierdo.
+ * Usa la misma URL pública referenciada en el CSS de autenticación del proyecto Java.
+ */
+.auth-visual {
+  position: relative;
+  width: 48%;
+  height: 100vh;
+  flex: 0 0 48%;
+  background-image: url("https://i.ibb.co/zhw8jbGh/Gemini-Generated-Image-lavqb0lavqb0lavq-Photoroom.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  overflow: hidden;
 }
 
-/* Ajuste del título principal del login. */
-.login-card h1 {
-  margin-bottom: 4px;
+/*
+ * Capa oscura sobre la imagen para mejorar legibilidad del texto.
+ */
+.auth-visual::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(4, 10, 18, 0.2) 0%,
+    rgba(4, 10, 18, 0.28) 45%,
+    rgba(4, 10, 18, 0.62) 100%
+  );
 }
 
-/* Distribución vertical del formulario de login. */
-.login-card form {
-  display: grid;
-  gap: 12px;
-  margin-top: 24px;
+/*
+ * Texto institucional ubicado sobre la imagen lateral.
+ */
+.auth-visual-copy {
+  position: absolute;
+  left: 32px;
+  bottom: 28px;
+  z-index: 2;
+  max-width: 390px;
+  color: #ffffff;
 }
 
-/* Estilo general de campos de entrada. */
-input {
+.auth-visual-copy h1 {
+  margin: 0 0 12px 0;
+  font-size: 3rem;
+  line-height: 1.03;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+}
+
+.auth-visual-copy p {
+  margin: 0;
+  font-size: 1.08rem;
+  line-height: 1.35;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+/*
+ * Panel derecho del login.
+ */
+.auth-panel {
+  width: 52%;
+  flex: 0 0 52%;
+  height: 100vh;
+  overflow-y: auto;
+  background: #f5f5f6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 32px;
+}
+
+.auth-panel-inner {
   width: 100%;
-  padding: 11px 12px;
-  border: 1px solid #d7dce3;
-  border-radius: 10px;
+  max-width: 540px;
 }
 
-/* Estilo general de botones. */
-button {
-  border: none;
-  border-radius: 10px;
-  padding: 11px 14px;
-  background: #10233f;
-  color: white;
+/*
+ * Marca visual IMT con logo.
+ */
+.auth-brand-lockup {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 18px;
 }
 
-/* Layout principal del sistema después del login. */
-.dashboard {
-  min-height: 100vh;
+.auth-brand-logo-box {
+  width: 52px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+}
+
+.auth-brand-logo {
+  width: 52px;
+  height: 52px;
+  object-fit: contain;
+  display: block;
+  transform: scale(2.5);
+  transform-origin: center;
+}
+
+.auth-brand-separator {
+  width: 1px;
+  height: 42px;
+  background: rgba(31, 41, 51, 0.16);
+}
+
+.auth-brand-text {
+  margin: 0;
+  font-size: 3rem;
+  line-height: 1;
+  font-weight: 700;
+  letter-spacing: -0.05em;
+  color: var(--imt-text);
+}
+
+.auth-title {
+  margin: 0 0 8px 0;
+  font-size: 2.2rem;
+  line-height: 1.08;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+}
+
+.auth-subtitle {
+  margin: 0 0 28px 0;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #6b7280;
+}
+
+/*
+ * Formulario de acceso.
+ */
+.auth-form {
   display: grid;
-  grid-template-columns: 310px 1fr;
+  gap: 18px;
 }
 
-/* Menú lateral izquierdo. */
-.sidebar {
-  background: #0d1b2f;
-  color: white;
-  padding: 24px;
+.auth-form-group {
   display: flex;
   flex-direction: column;
-  gap: 16px;
-}
-
-/* Ajuste de inputs dentro del menú lateral. */
-.sidebar input {
-  background: white;
-}
-
-/* Tarjeta interna con la información del doctor. */
-.doctor-box {
-  padding: 12px;
-  background: rgba(255, 255, 255, 0.08);
-  border-radius: 12px;
-}
-
-/* Lista vertical de pacientes. */
-.patient-list {
-  display: grid;
   gap: 8px;
 }
 
-/* Botones individuales de pacientes en el menú lateral. */
-.patient-list button {
-  background: rgba(255, 255, 255, 0.1);
-  text-align: left;
+.auth-form-group label {
+  font-size: 0.84rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #4b5563;
 }
 
-/* Botón para cerrar sesión. */
-.logout-button {
-  margin-top: auto;
-  background: #8c1d1d;
+.auth-form-group input {
+  min-height: 56px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  background: #ebedf0;
+  color: var(--imt-text);
+  font-size: 1rem;
+  padding: 0.9rem 1rem;
+  outline: none;
 }
 
-/* Área principal de trabajo. */
-.workspace {
-  padding: 32px;
+.auth-form-group input:focus {
+  border-color: rgba(11, 103, 173, 0.25);
+  box-shadow: 0 0 0 0.2rem rgba(11, 103, 173, 0.1);
+  background: #f1f3f6;
 }
 
-/* Panel blanco reutilizable para formularios y detalles. */
-.panel,
-.empty-workspace {
-  background: white;
-  border-radius: 20px;
-  padding: 28px;
-  min-height: 420px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.06);
+.auth-submit {
+  min-height: 58px;
+  border: none;
+  border-radius: 10px;
+  background: #0b67ad;
+  color: #ffffff;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
 }
 
-/* Estado inicial del área de trabajo cuando no hay paciente seleccionado. */
-.empty-workspace {
-  display: grid;
-  place-content: center;
-  text-align: center;
+.auth-submit:hover {
+  background: #095791;
 }
 
-/* Formulario de paciente en dos columnas. */
-.patient-form {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
+.auth-alert {
+  margin-bottom: 20px;
+  border: 1px solid rgba(185, 28, 28, 0.12);
+  border-radius: 12px;
+  background: rgba(254, 242, 242, 0.92);
+  color: #991b1b;
+  padding: 14px 16px;
+  font-size: 0.94rem;
+}
+
+.auth-footer-note {
+  margin-top: 34px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(15, 23, 42, 0.08);
+  font-size: 0.84rem;
+  line-height: 1.45;
+  color: #9aa1aa;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+/* =========================================================
+   Layout interno del sistema
+   ========================================================= */
+
+.imt-shell {
+  height: 100vh;
+  min-height: 100vh;
+  background: var(--imt-bg);
+  overflow: hidden;
+}
+
+.imt-main {
+  height: calc(100vh - var(--imt-topbar-height));
+  margin-top: var(--imt-topbar-height);
+  overflow: hidden;
+}
+
+/*
+ * Header superior fijo.
+ */
+.imt-topbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  height: var(--imt-topbar-height);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 32px;
+  background: var(--imt-surface);
+  border-bottom: 1px solid var(--imt-border);
+}
+
+.imt-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.imt-brand-lockup {
+  display: flex;
+  align-items: center;
   gap: 14px;
 }
 
-/* Contenedor de acciones del formulario. */
-.form-actions {
+.imt-header-logo-box {
+  width: 46px;
+  height: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+}
+
+.imt-header-logo {
+  width: 46px;
+  height: 46px;
+  object-fit: contain;
+  display: block;
+  transform: scale(3.5);
+  transform-origin: center;
+}
+
+.imt-brand-separator {
+  width: 1px;
+  height: 36px;
+  background: rgba(31, 41, 51, 0.16);
+}
+
+.imt-brand-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.imt-brand-title {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.05em;
+}
+
+.imt-brand-subtitle {
+  margin: 2px 0 0 0;
+  font-size: 0.78rem;
+  color: var(--imt-muted);
+}
+
+/*
+ * Acciones del header.
+ */
+.imt-top-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.doctor-chip {
+  min-height: 42px;
+  padding: 6px 14px 6px 8px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid var(--imt-border);
+  border-radius: 12px;
+  background: #ffffff;
+  font-size: 0.86rem;
+  font-weight: 700;
+}
+
+.doctor-chip img {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.top-icon-btn {
+  width: 38px;
+  height: 38px;
+  border: none;
+  border-radius: 12px;
+  background: transparent;
+  color: #111827;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.top-icon-btn:hover {
+  background: #f1f3f5;
+}
+
+.logout-btn {
+  color: var(--imt-danger);
+}
+
+/*
+ * Sidebar fijo de pacientes.
+ */
+.imt-sidebar {
+  position: fixed;
+  top: var(--imt-topbar-height);
+  left: 0;
+  bottom: 0;
+  z-index: 900;
+  width: var(--imt-sidebar-width);
+  display: flex;
+  flex-direction: column;
+  background: var(--imt-sidebar);
+  border-right: 1px solid var(--imt-border);
+  overflow: hidden;
+}
+
+.sidebar-content {
+  flex: 1 1 auto;
+  padding: 22px 28px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.sidebar-title {
+  margin: 0 0 22px 0;
+  font-size: 0.86rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #2f3742;
+}
+
+/*
+ * Buscador lateral.
+ */
+.patient-search {
+  display: flex;
+  margin-bottom: 28px;
+}
+
+.patient-search input {
+  width: 100%;
+  height: 44px;
+  border: 1px solid var(--imt-border);
+  border-radius: 8px 0 0 8px;
+  background: #ffffff;
+  font-size: 0.9rem;
+  padding: 0 14px;
+  outline: none;
+}
+
+.patient-search input:focus {
+  border-color: rgba(7, 95, 159, 0.35);
+  box-shadow: 0 0 0 0.18rem rgba(7, 95, 159, 0.08);
+}
+
+.patient-search button {
+  width: 48px;
+  border: 1px solid var(--imt-border);
+  border-left: none;
+  border-radius: 0 8px 8px 0;
+  background: #ffffff;
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+
+/*
+ * Estado vacío de la lista lateral.
+ */
+.patient-empty {
+  margin-top: 160px;
+  padding: 28px 18px;
+  border: 1px dashed #cfd4dc;
+  border-radius: 12px;
+  color: var(--imt-muted);
+  text-align: center;
+  font-size: 0.95rem;
+  line-height: 1.35;
+}
+
+/*
+ * Lista lateral de pacientes.
+ */
+.patient-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.patient-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 8px;
+  border: none;
+  border-radius: 10px;
+  background: transparent;
+  color: #2f3742;
+  text-align: left;
+  font-size: 0.92rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.patient-item:hover,
+.patient-item.active {
+  background: #eef2f6;
+  color: #111827;
+}
+
+.patient-dot {
+  width: 15px;
+  height: 15px;
+  min-width: 15px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #075f9f, #15a37f);
+}
+
+.sidebar-footer {
+  flex: 0 0 auto;
+  padding: 22px 28px;
+  border-top: 1px solid var(--imt-border);
+  background: var(--imt-sidebar);
+}
+
+.new-record-btn {
+  width: 100%;
+  min-height: 54px;
+  border: none;
+  border-radius: 4px;
+  background: var(--imt-primary);
+  color: #ffffff;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.new-record-btn:hover {
+  background: var(--imt-primary-hover);
+}
+
+/*
+ * Área de trabajo principal.
+ */
+.workspace {
+  height: calc(100vh - var(--imt-topbar-height));
+  margin-left: var(--imt-sidebar-width);
+  padding: 28px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.workspace-card,
+.patient-workspace-card {
+  width: min(100%, var(--imt-workspace-max-width));
+  min-height: calc(100vh - var(--imt-topbar-height) - 56px);
+  margin: 0 auto;
+  background: var(--imt-surface);
+  border: 1px solid rgba(230, 232, 236, 0.75);
+  border-radius: 6px;
+}
+
+/*
+ * Estado inicial del área de trabajo.
+ */
+.workspace-card {
+  padding: 48px clamp(48px, 6vw, 150px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.workspace-empty {
+  max-width: 560px;
+}
+
+.workspace-kicker {
+  margin-bottom: 10px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--imt-muted);
+}
+
+.workspace-title {
+  margin: 0 0 14px 0;
+  font-size: 2.1rem;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+}
+
+.workspace-text {
+  margin: 0;
+  color: var(--imt-muted);
+  font-size: 1.05rem;
+  line-height: 1.55;
+}
+
+/* =========================================================
+   Formulario y detalle de paciente
+   ========================================================= */
+
+.patient-workspace-card {
+  padding: 34px clamp(70px, 7vw, 180px);
+}
+
+.patient-form-header {
+  width: 100%;
+  margin-bottom: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.patient-form-title {
+  margin: 0;
+  font-size: 2rem;
+  line-height: 1.1;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+  color: var(--imt-text);
+}
+
+.patient-subtitle {
+  margin: 6px 0 0 0;
+  color: var(--imt-muted);
+  font-size: 0.95rem;
+}
+
+.patient-header-profile {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.patient-avatar {
+  border-radius: 50%;
+  overflow: hidden;
+  background: linear-gradient(135deg, #075f9f, #15a37f);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.patient-avatar-lg {
+  width: 54px;
+  height: 54px;
+  min-width: 54px;
+  font-size: 0.95rem;
+}
+
+/*
+ * Navegación visual del paciente.
+ */
+.patient-tabs {
+  width: 100%;
+  margin: 8px 0 30px 0;
+  display: flex;
+  gap: 24px;
+  border-bottom: 1px solid var(--imt-border);
+  overflow-x: auto;
+}
+
+.patient-tab {
+  padding: 0 0 12px 0;
+  border: none;
+  background: transparent;
+  color: var(--imt-muted);
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.patient-tab:hover {
+  color: var(--imt-primary);
+}
+
+.patient-tab.active {
+  color: var(--imt-primary);
+  border-bottom: 2px solid var(--imt-primary);
+}
+
+/*
+ * Grilla de formulario.
+ */
+.patient-form-grid {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px 28px;
+}
+
+.patient-form-group {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.patient-form-group-full {
   grid-column: 1 / -1;
+}
+
+.patient-form-group label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #4b5563;
+}
+
+.patient-form-group input,
+.patient-form-group select {
+  width: 100%;
+  min-height: 48px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: var(--imt-input);
+  color: var(--imt-text);
+  font-size: 0.96rem;
+  padding: 0.78rem 0.95rem;
+  outline: none;
+}
+
+.patient-form-group input:focus,
+.patient-form-group select:focus {
+  border-color: rgba(7, 95, 159, 0.35);
+  box-shadow: 0 0 0 0.18rem rgba(7, 95, 159, 0.08);
+  background: #f4f6f8;
+}
+
+.patient-form-group input:disabled,
+.patient-form-group select:disabled {
+  opacity: 1;
+  color: #374151;
+  background: #f3f4f6;
+  cursor: default;
+}
+
+.patient-form-alert {
+  margin-bottom: 22px;
+  padding: 14px 16px;
+  border-radius: 12px;
+  background: var(--imt-danger-bg);
+  border: 1px solid var(--imt-danger-border);
+  color: #9f1239;
+  font-size: 0.92rem;
+}
+
+/*
+ * Botones de acción del formulario.
+ */
+.patient-form-actions {
+  margin-top: 34px;
   display: flex;
   justify-content: flex-end;
-  gap: 12px;
-  margin-top: 16px;
+  align-items: center;
+  gap: 14px;
 }
 
-/* Pestañas visuales del perfil del paciente. */
-.tabs {
-  display: flex;
-  gap: 10px;
-  margin: 20px 0;
+.patient-action-btn {
+  min-width: 120px;
+  min-height: 46px;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
 }
 
-/* Grilla para mostrar la información del paciente seleccionado. */
-.patient-detail {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
+.patient-action-primary {
+  background: var(--imt-primary);
+  color: #ffffff;
 }
 
-/* Mensaje visual de error. */
-.alert-error {
-  background: #ffe5e5;
-  color: #8c1d1d;
-  padding: 10px;
-  border-radius: 10px;
-  margin-bottom: 12px;
+.patient-action-primary:hover {
+  background: var(--imt-primary-hover);
 }
 
-/* Texto informativo cuando no hay registros. */
-.empty-text {
-  opacity: 0.75;
+.patient-action-secondary {
+  background: #e9ecef;
+  color: #374151;
+}
+
+.patient-action-secondary:hover {
+  background: #dde2e7;
+}
+
+.patient-action-danger {
+  background: var(--imt-danger);
+  color: #ffffff;
+}
+
+.patient-action-danger:hover {
+  background: #991b1b;
+}
+
+.patient-action-disabled {
+  background: #d7dce2;
+  color: #7b8490;
+  cursor: not-allowed;
+}
+
+/* =========================================================
+   Responsive
+   ========================================================= */
+
+@media (max-width: 992px) {
+  .auth-shell {
+    height: auto;
+    min-height: 100vh;
+    flex-direction: column;
+    overflow: visible;
+  }
+
+  .auth-visual,
+  .auth-panel {
+    width: 100%;
+    flex: 0 0 auto;
+  }
+
+  .auth-visual {
+    height: 320px;
+  }
+
+  .auth-panel {
+    height: auto;
+    padding: 32px 20px 48px;
+  }
+
+  .imt-shell {
+    height: auto;
+    min-height: 100vh;
+    overflow: visible;
+  }
+
+  .imt-topbar {
+    position: sticky;
+  }
+
+  .imt-main {
+    height: auto;
+    margin-top: 0;
+    overflow: visible;
+  }
+
+  .imt-sidebar {
+    position: relative;
+    top: auto;
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid var(--imt-border);
+  }
+
+  .workspace {
+    height: auto;
+    margin-left: 0;
+    padding: 18px;
+    overflow: visible;
+  }
+
+  .workspace-card,
+  .patient-workspace-card {
+    min-height: auto;
+  }
+
+  .patient-empty {
+    margin-top: 24px;
+  }
+}
+
+@media (max-width: 768px) {
+  .patient-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .patient-form-group-full {
+    grid-column: auto;
+  }
+
+  .patient-tabs {
+    flex-wrap: wrap;
+    gap: 14px;
+  }
+
+  .patient-form-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .patient-action-btn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 576px) {
+  .imt-topbar {
+    padding: 0 18px;
+  }
+
+  .imt-brand-title {
+    font-size: 1.7rem;
+  }
+
+  .doctor-chip span {
+    display: none;
+  }
+
+  .workspace-card,
+  .patient-workspace-card {
+    padding: 28px 20px;
+  }
+
+  .patient-form-title {
+    font-size: 1.65rem;
+  }
+
+  .auth-brand-text {
+    font-size: 2.4rem;
+  }
+
+  .auth-visual-copy h1 {
+    font-size: 1.9rem;
+  }
 }
