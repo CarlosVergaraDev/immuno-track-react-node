@@ -1,10 +1,10 @@
 /*
- * Servicio de comunicación con el backend para el módulo de pacientes.
+ * Servicio de comunicación HTTP para el módulo de pacientes.
  *
  * Responsabilidad:
- * - Centralizar las operaciones HTTP del CRUD de pacientes.
- * - Conectar React con las rutas de Node/Express.
- * - Mantener separada la lógica de comunicación de la lógica visual.
+ * - Centralizar todas las peticiones del frontend hacia el backend Node/Express.
+ * - Exponer funciones reutilizables para listar, buscar, crear, actualizar y eliminar pacientes.
+ * - Evitar que los componentes React tengan URLs o lógica de fetch repetida.
  */
 
 // URL base del módulo de pacientes en el backend.
@@ -25,11 +25,11 @@ export async function listarPacientes() {
 /*
  * Busca pacientes por nombre, apellido o número de documento.
  *
- * @param {string} termino - Texto usado para filtrar pacientes.
+ * @param {string} termino - Texto digitado por el usuario para filtrar pacientes.
  * @returns {Promise<Array>} Lista de pacientes encontrados.
  */
 export async function buscarPacientes(termino) {
-  const terminoSeguro = encodeURIComponent(termino);
+  const terminoSeguro = encodeURIComponent(termino || "");
 
   const respuesta = await fetch(`${API_URL}/buscar?termino=${terminoSeguro}`);
   const datos = await respuesta.json();
@@ -38,10 +38,10 @@ export async function buscarPacientes(termino) {
 }
 
 /*
- * Registra un nuevo paciente enviando sus datos al backend.
+ * Registra un nuevo paciente en la caché del backend.
  *
  * @param {Object} paciente - Datos completos del paciente.
- * @returns {Promise<Object>} Respuesta del backend.
+ * @returns {Promise<Object>} Respuesta del backend con el paciente creado.
  */
 export async function crearPaciente(paciente) {
   const respuesta = await fetch(API_URL, {
@@ -56,6 +56,31 @@ export async function crearPaciente(paciente) {
 
   if (!respuesta.ok) {
     throw new Error(datos.mensaje || "Error al registrar paciente.");
+  }
+
+  return datos;
+}
+
+/*
+ * Actualiza un paciente existente en la caché del backend.
+ *
+ * @param {number} id - Identificador del paciente que se desea actualizar.
+ * @param {Object} paciente - Nuevos datos del paciente.
+ * @returns {Promise<Object>} Respuesta del backend con el paciente actualizado.
+ */
+export async function actualizarPaciente(id, paciente) {
+  const respuesta = await fetch(`${API_URL}/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(paciente)
+  });
+
+  const datos = await respuesta.json();
+
+  if (!respuesta.ok) {
+    throw new Error(datos.mensaje || "Error al actualizar paciente.");
   }
 
   return datos;

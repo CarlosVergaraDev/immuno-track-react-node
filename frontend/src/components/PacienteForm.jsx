@@ -1,21 +1,23 @@
 /*
- * Formulario de registro de paciente.
+ * Formulario reutilizable para crear y editar pacientes.
  *
  * Responsabilidad:
  * - Capturar datos administrativos y demográficos del paciente.
- * - Enviar el registro al backend Node/Express.
- * - Mantener una estructura visual cercana al formulario del proyecto Java.
+ * - Registrar nuevos pacientes mediante POST.
+ * - Actualizar pacientes existentes mediante PUT.
+ * - Reutilizar la misma interfaz para mantener consistencia visual y evitar duplicación.
  */
 
-import { useState } from "react";
-import { crearPaciente } from "../services/pacienteApi";
+import { useEffect, useState } from "react";
+import { crearPaciente, actualizarPaciente } from "../services/pacienteApi";
 
-function PacienteForm({ onPacienteCreado, onCancelar }) {
-  /*
-   * Estado principal del formulario.
-   * Cada propiedad representa un campo del paciente.
-   */
-  const [formulario, setFormulario] = useState({
+/*
+ * Construye un objeto vacío con la estructura base del formulario.
+ *
+ * Esta función evita repetir la misma estructura en diferentes puntos del componente.
+ */
+function crearFormularioVacio() {
+  return {
     tipoDocumento: "CC",
     numeroDocumento: "",
     primerNombre: "",
@@ -31,7 +33,51 @@ function PacienteForm({ onPacienteCreado, onCancelar }) {
     eps: "",
     telefono: "",
     email: ""
-  });
+  };
+}
+
+/*
+ * Convierte un paciente existente en estado inicial del formulario.
+ *
+ * Si no existe paciente inicial, retorna el formulario vacío.
+ * Esto permite que el componente funcione tanto para crear como para editar.
+ */
+function construirFormularioInicial(pacienteInicial) {
+  if (!pacienteInicial) {
+    return crearFormularioVacio();
+  }
+
+  return {
+    tipoDocumento: pacienteInicial.tipoDocumento || "CC",
+    numeroDocumento: pacienteInicial.numeroDocumento || "",
+    primerNombre: pacienteInicial.primerNombre || "",
+    segundoNombre: pacienteInicial.segundoNombre || "",
+    primerApellido: pacienteInicial.primerApellido || "",
+    segundoApellido: pacienteInicial.segundoApellido || "",
+    genero: pacienteInicial.genero || "",
+    fechaNacimiento: pacienteInicial.fechaNacimiento || "",
+    ciudad: pacienteInicial.ciudad || "",
+    departamento: pacienteInicial.departamento || "",
+    estadoCivil: pacienteInicial.estadoCivil || "",
+    ocupacion: pacienteInicial.ocupacion || "",
+    eps: pacienteInicial.eps || "",
+    telefono: pacienteInicial.telefono || "",
+    email: pacienteInicial.email || ""
+  };
+}
+
+function PacienteForm({ pacienteInicial, onPacienteGuardado, onCancelar }) {
+  /*
+   * Determina si el formulario está creando un nuevo registro o editando uno existente.
+   */
+  const esEdicion = Boolean(pacienteInicial?.id);
+
+  /*
+   * Estado principal del formulario.
+   */
+  const [formulario, setFormulario] = useState(() =>
+    construirFormularioInicial(pacienteInicial)
+  );
 
   /*
    * Estado de error usado para mostrar validaciones devueltas por el backend.
@@ -39,8 +85,20 @@ function PacienteForm({ onPacienteCreado, onCancelar }) {
   const [error, setError] = useState("");
 
   /*
+   * Sincroniza el formulario cuando cambia el paciente que se va a editar.
+   *
+   * Esto es importante porque el mismo componente puede abrirse primero para crear
+   * y luego para editar otro paciente durante la misma sesión.
+   */
+  useEffect(() => {
+    setFormulario(construirFormularioInicial(pacienteInicial));
+    setError("");
+  }, [pacienteInicial]);
+
+  /*
    * Actualiza dinámicamente cualquier campo del formulario.
-   * El atributo "name" del input debe coincidir con la propiedad del estado.
+   *
+   * El atributo "name" de cada input debe coincidir con una propiedad del estado.
    */
   function manejarCambio(evento) {
     const { name, value } = evento.target;
@@ -52,17 +110,23 @@ function PacienteForm({ onPacienteCreado, onCancelar }) {
   }
 
   /*
-   * Envía los datos del paciente al backend.
-   * Si la operación es correcta, notifica al componente padre para cerrar
-   * el formulario y recargar la lista lateral.
+   * Envía los datos al backend.
+   *
+   * Flujo:
+   * - Si hay pacienteInicial con id, ejecuta actualización.
+   * - Si no hay pacienteInicial, ejecuta creación.
+   * - Luego notifica al componente padre para recargar la lista.
    */
   async function manejarSubmit(evento) {
     evento.preventDefault();
     setError("");
 
     try {
-      await crearPaciente(formulario);
-      onPacienteCreado();
+      const respuesta = esEdicion
+        ? await actualizarPaciente(pacienteInicial.id, formulario)
+        : await crearPaciente(formulario);
+
+      onPacienteGuardado(respuesta.data);
     } catch (error) {
       setError(error.message);
     }
@@ -71,7 +135,9 @@ function PacienteForm({ onPacienteCreado, onCancelar }) {
   return (
     <section className="patient-workspace-card">
       <header className="patient-form-header">
-        <h1 className="patient-form-title">Registro</h1>
+        <h1 className="patient-form-title">
+          {esEdicion ? "Editar paciente" : "Registro"}
+        </h1>
       </header>
 
       {error && <div className="patient-form-alert">{error}</div>}
@@ -266,7 +332,7 @@ function PacienteForm({ onPacienteCreado, onCancelar }) {
             type="submit"
             className="patient-action-btn patient-action-primary"
           >
-            Guardar
+            {esEdicion ? "Actualizar" : "Guardar"}
           </button>
         </div>
       </form>

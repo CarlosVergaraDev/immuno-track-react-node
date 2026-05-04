@@ -21,25 +21,32 @@ import {
 } from "../services/pacienteApi";
 
 function MenuPage({ usuario, onLogout }) {
-  /*
+
+   /*
    * Estado con los pacientes consultados desde el backend.
    */
-  const [pacientes, setPacientes] = useState([]);
+   const [pacientes, setPacientes] = useState([]);
 
-  /*
+   /*
    * Estado del paciente que el usuario selecciona desde el panel lateral.
    */
-  const [pacienteSeleccionado, setPacienteSeleccionado] = useState(null);
+   const [pacienteSeleccionado, setPacienteSeleccionado] = useState(null);
 
-  /*
+   /*
    * Controla si el área de trabajo muestra el formulario de nuevo registro.
    */
-  const [mostrarFormulario, setMostrarFormulario] = useState(false);
+   const [mostrarFormulario, setMostrarFormulario] = useState(false);
 
-  /*
+   /*
+   * Paciente que será enviado al formulario cuando se use la opción de edición.
+   * Si es null, el formulario se abre en modo creación.
+   */
+   const [pacienteEnEdicion, setPacienteEnEdicion] = useState(null);
+
+   /*
    * Almacena el texto escrito en el buscador lateral.
    */
-  const [terminoBusqueda, setTerminoBusqueda] = useState("");
+   const [terminoBusqueda, setTerminoBusqueda] = useState("");
 
   /*
    * URL pública del logo institucional utilizado en el proyecto original.
@@ -81,7 +88,7 @@ function MenuPage({ usuario, onLogout }) {
     setPacientes(datos);
   }
 
-  /*
+   /*
    * Selecciona un paciente desde el panel lateral y oculta el formulario.
    */
   function manejarSeleccionPaciente(paciente) {
@@ -89,13 +96,25 @@ function MenuPage({ usuario, onLogout }) {
     setMostrarFormulario(false);
   }
 
-  /*
+   /*
    * Abre el formulario de nuevo registro.
    */
-  function manejarNuevoRegistro() {
-    setPacienteSeleccionado(null);
-    setMostrarFormulario(true);
-  }
+    function manejarNuevoRegistro() {
+        setPacienteSeleccionado(null);
+        setPacienteEnEdicion(null);
+        setMostrarFormulario(true);
+    }
+
+
+    /*
+    * Abre el formulario en modo edición usando el paciente seleccionado.
+    */
+    function manejarEditar() {
+        if (!pacienteSeleccionado) return;
+
+        setPacienteEnEdicion(pacienteSeleccionado);
+        setMostrarFormulario(true);
+    }
 
   /*
    * Elimina el paciente seleccionado después de confirmación.
@@ -232,13 +251,26 @@ function MenuPage({ usuario, onLogout }) {
 
         <section className="workspace">
           {mostrarFormulario ? (
+
+            /*
+            * Formulario reutilizable.
+            * Si pacienteEnEdicion tiene datos, el formulario actualiza.
+            * Si pacienteEnEdicion es null, el formulario crea un nuevo paciente.
+            */
             <PacienteForm
-              onCancelar={() => setMostrarFormulario(false)}
-              onPacienteCreado={async () => {
+            pacienteInicial={pacienteEnEdicion}
+            onCancelar={() => {
                 setMostrarFormulario(false);
+                setPacienteEnEdicion(null);
+            }}
+            onPacienteGuardado={async (pacienteGuardado) => {
+                setMostrarFormulario(false);
+                setPacienteEnEdicion(null);
+                setPacienteSeleccionado(pacienteGuardado);
                 await cargarPacientes();
-              }}
+            }}
             />
+
           ) : pacienteSeleccionado ? (
             <section className="patient-workspace-card">
               <header className="patient-form-header">
@@ -333,12 +365,13 @@ function MenuPage({ usuario, onLogout }) {
                   Eliminar
                 </button>
 
+       
                 <button
-                  type="button"
-                  className="patient-action-btn patient-action-disabled"
-                  disabled
+                type="button"
+                className="patient-action-btn patient-action-secondary"
+                onClick={manejarEditar}
                 >
-                  Editar
+                Editar
                 </button>
 
                 <button
